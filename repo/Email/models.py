@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+
+class EmailAuth(models.Model):
+    email = models.CharField(max_length=30)
+    auth_code = models.CharField(max_length=10)
+    auth_status = models.BooleanField()
+
+    def __str__(self):
+        return self.email
