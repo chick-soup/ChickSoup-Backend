@@ -26,5 +26,6 @@ class EmailCheckAPI(APIView):
 
         auth_code = Random.create_random_string()
         EmailService.send_email(email, code=auth_code)
-
+        
+        EmailService.create_email_queryset(email=email, auth_code=auth_code)
         return Response({"email": email}, status=status.HTTP_200_OK)
