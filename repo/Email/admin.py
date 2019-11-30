@@ -3,4 +3,9 @@ from .models import (
     EmailAuth
 )
 
-admin.site.register(EmailAuth)
+
+class EmailAuthAdmin(admin.ModelAdmin):
+    list_display = ['email', 'auth_code', 'auth_status']
+
+
+admin.site.register(EmailAuth, EmailAuthAdmin)
