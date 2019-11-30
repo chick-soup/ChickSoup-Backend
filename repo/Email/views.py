@@ -6,7 +6,8 @@ from .serializers import (
     EmailCheckSerializers
 )
 from .services import (
-    EmailService
+    EmailService,
+    Random,
 )
 
 
@@ -22,5 +23,8 @@ class EmailCheckAPI(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         EmailService.delete_email_if_exist(email)
-        EmailService.send_email(email, code="asdfa323s")
+
+        auth_code = Random.create_random_string()
+        EmailService.send_email(email, code=auth_code)
+
         return Response({"email": email}, status=status.HTTP_200_OK)

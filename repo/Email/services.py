@@ -1,3 +1,7 @@
+import string
+import random
+from typing import List
+
 from django.core.mail import send_mail
 
 from .models import EmailAuth
@@ -5,20 +9,24 @@ from .models import EmailAuth
 
 class EmailService(object):
     @staticmethod
-    def check_email_exists(email):
+    def check_email_exists(email: str) -> bool:
         return True if len(EmailAuth.objects.filter(email=email).values()) else False
 
     @staticmethod
-    def check_email_auth_status(email):
+    def check_email_auth_status(email: str) -> bool:
         return EmailAuth.objects.get(email=email).auth_status
 
     @staticmethod
-    def delete_email_if_exist(email):
+    def create_email_queryset(email: str, auth_code: str) -> None:
+        EmailAuth(email=email, auth_code=auth_code, auth_status=False).save()
+
+    @staticmethod
+    def delete_email_if_exist(email: str) -> None:
         if EmailService.check_email_exists(email):
             EmailAuth.objects.get(email=email).delete()
 
     @staticmethod
-    def send_email(*email_list, code):
+    def send_email(*email_list: List[str, ], code: str) -> None:
         for email in email_list:
             send_mail(
                 'ChickSoup 이메일 인증 코드입니다.',
@@ -34,3 +42,11 @@ class EmailService(object):
                 fail_silently=False,
             )
 
+
+class Random(object):
+    @staticmethod
+    def create_random_string() -> str:
+        result = ""
+        for i in range(10):
+            result += random.choice(string.ascii_letters + string.digits)
+        return result
