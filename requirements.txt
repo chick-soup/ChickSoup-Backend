@@ -1,0 +1,10 @@
+bcrypt==3.1.7
+cffi==1.13.2
+Django==2.2.7
+djangorestframework==3.10.3
+djangorestframework-jwt==1.11.0
+pycparser==2.19
+PyJWT==1.7.1
+pytz==2019.3
+six==1.13.0
+sqlparse==0.3.0
