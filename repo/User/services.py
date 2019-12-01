@@ -1,6 +1,9 @@
 import bcrypt
 
-from .models import User
+from .models import (
+    User,
+    UserInform
+)
 
 
 class UserService(object):
@@ -10,7 +13,9 @@ class UserService(object):
 
     @staticmethod
     def create_new_user(email: str, hashed_password: str) -> None:
-        User(email=email, password=hashed_password).save()
+        user = User(email=email, password=hashed_password)
+        user.save()
+        UserInform(user_id=user, nickname="DEFAULT", status_message=None).save()
 
 
 class HashService(object):
@@ -18,3 +23,8 @@ class HashService(object):
     def hash_string_to_password(password: str) -> str:
         return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
+
+class JWTService(object):
+    @staticmethod
+    def create_jwt_with_id(user_id: str) -> str:
+        
