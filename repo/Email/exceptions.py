@@ -9,3 +9,8 @@ class EmailExists(APIException):
 class EmailNotRequestAuth(APIException):
     status_code = 471
     default_detail = "This email has not been requested for authentication"
+
+
+class AuthCodeDoseNotMatch(APIException):
+    status_code = 472
+    default_detail = "The authentication number does not match."
