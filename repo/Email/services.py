@@ -30,6 +30,12 @@ class EmailService(object):
             EmailAuth.objects.get(email=email).delete()
 
     @staticmethod
+    def email_auth_complete(email: str) -> None:
+        email_instance = EmailAuth.objects.get(email=email)
+        email_instance.auth_status = True
+        email_instance.save()
+
+    @staticmethod
     def send_email(*email_list: List[str, ], code: str) -> None:
         for email in email_list:
             send_mail(
