@@ -17,4 +17,4 @@ class UserInform(models.Model):
         verbose_name_plural = "UserInform"
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=12)
-    status_message = models.CharField(max_length=100)
+    status_message = models.CharField(max_length=100, null=True)
