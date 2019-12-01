@@ -17,6 +17,7 @@ from .exceptions import (
 )
 
 
+# 이메일과 인증 코드를 받아서 인증을 완료시키는 API
 class EmailAuthAPI(APIView):
     def post(self, request):
         serializer = EmailAuthSerializers(data=request.data)
@@ -39,6 +40,7 @@ class EmailAuthAPI(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
+# 이메일 중복 확인 및 인증 코드 발송 API
 class EmailCheckAPI(APIView):
     def post(self, request):
         serializer = EmailCheckSerializers(data=request.data)
