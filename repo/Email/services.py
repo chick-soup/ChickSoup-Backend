@@ -17,6 +17,10 @@ class EmailService(object):
         return EmailAuth.objects.get(email=email).auth_status
 
     @staticmethod
+    def check_email_auth_code(email: str) -> str:
+        return EmailAuth.objects.get(email=email).auth_code
+
+    @staticmethod
     def create_email_queryset(email: str, auth_code: str) -> None:
         EmailAuth(email=email, auth_code=auth_code, auth_status=False).save()
 
