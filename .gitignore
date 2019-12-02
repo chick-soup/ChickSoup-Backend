@@ -4,5 +4,5 @@ db.sqlite3
 __pycache__
 *.pyc
 *~
-.DS_Storeg
+.DS_Store
 repo/conf/hidden.py

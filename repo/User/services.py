@@ -1,4 +1,5 @@
 import bcrypt
+import jwt
 
 from .models import (
     User,
@@ -26,5 +27,10 @@ class HashService(object):
 
 class JWTService(object):
     @staticmethod
-    def create_jwt_with_id(user_id: str) -> str:
-        
+    def create_access_token_with_id(user_id: int) -> str:
+        # return jwt.encode({
+        #     'id': user_id,
+        #     'exp':
+        # })
+        pass
+
