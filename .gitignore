@@ -5,4 +5,3 @@ __pycache__
 *.pyc
 *~
 .DS_Storeg
-repo/conf/hidden.py
