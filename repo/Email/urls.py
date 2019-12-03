@@ -6,6 +6,6 @@ from .views import (
 )
 
 urlpatterns = [
-    path('check/', EmailCheckAPI.as_view()),
-    path('auth/', EmailAuthAPI.as_view())
+    path('check', EmailCheckAPI.as_view()),
+    path('auth', EmailAuthAPI.as_view())
 ]

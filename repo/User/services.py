@@ -1,5 +1,6 @@
 import bcrypt
 import jwt
+from datetime import datetime, timedelta
 
 from .models import (
     User,
@@ -27,10 +28,9 @@ class HashService(object):
 
 class JWTService(object):
     @staticmethod
-    def create_access_token_with_id(user_id: int) -> str:
-        # return jwt.encode({
-        #     'id': user_id,
-        #     'exp':
-        # })
-        pass
+    def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
+        return jwt.encode({
+            'id': user_id,
+            'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
+        })
 
