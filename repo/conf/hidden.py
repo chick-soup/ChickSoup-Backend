@@ -1,7 +1,5 @@
 import os
 
 
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-JWT_SECRET_KEY = os.getenv("SECRET_KEY")
-
-print(os.environ)
+EMAIL_HOST_PASSWORD = "wavpqkhbmptcoiuh"
+JWT_SECRET_KEY = "o8@#hsAG21Y#j1@bs21sDa&*12Ab(sH3$e2W"
