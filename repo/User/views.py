@@ -36,15 +36,3 @@ class SignUpAPI(APIView):
         UserService.create_new_user(_email, HashService.hash_string_to_password(_password))
 
         return Response(data, status=status.HTTP_200_OK)
-
-
-class RegisterFriendApi(APIView):
-    def post(self, request):
-        #TODO
-        pass
-
-
-class FindFriendApi(APIView):
-    def get(self, request):
-        #TODO
-        pass
