@@ -1,12 +1,9 @@
 from rest_framework.views import APIView
-
-class RegisterFriendApi(APIView):
-    def post(self, request):
-        #TODO
-        pass
+from rest_framework.response import Response
+from rest_framework import status
 
 
-class FindFriendApi(APIView):
+class SignUpAPI(APIView):
     def get(self, request):
-        #TODO
-        pass
+
+        return Response("TEST", 200)
