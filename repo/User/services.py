@@ -7,6 +7,8 @@ from .models import (
     UserInform
 )
 
+from conf.hidden import JWT_SECRET_KEY
+
 
 class UserService(object):
     @staticmethod
@@ -14,10 +16,12 @@ class UserService(object):
         return True if len(User.objects.filter(email=email).values()) else False
 
     @staticmethod
-    def create_new_user(email: str, hashed_password: str) -> None:
+    def create_new_user(email: str, hashed_password: str) -> int:
         user = User(email=email, password=hashed_password)
         user.save()
         UserInform(user_id=user, nickname="DEFAULT", status_message=None).save()
+
+        return user.id
 
 
 class HashService(object):
@@ -32,5 +36,7 @@ class JWTService(object):
         return jwt.encode({
             'id': user_id,
             'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
+        }, JWT_SECRET_KEY, algorithm='HS256', headers={
+            'token': 'access'
         })
 
