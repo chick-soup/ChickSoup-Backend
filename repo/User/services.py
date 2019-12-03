@@ -6,6 +6,7 @@ from .models import (
     User,
     UserInform
 )
+from .exceptions import IncorrectJWT
 
 from conf.hidden import JWT_SECRET_KEY
 
@@ -39,4 +40,10 @@ class JWTService(object):
         }, JWT_SECRET_KEY, algorithm='HS256', headers={
             'token': 'access'
         })
+
+    @staticmethod
+    def decode_access_token_to_id(access_token: str) -> int:
+        if not jwt.get_unverified_header(access_token)['token'] == 'access':
+            raise IncorrectJWT
+        return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
 
