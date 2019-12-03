@@ -11,8 +11,8 @@ class FriendsList(Model):
 
     guest_id = ForeignKey(User, on_delete=CASCADE)
 
-    bookmark = BooleanField()
+    bookmark = BooleanField(null=True)
 
-    hidden = BooleanField()
+    hidden = BooleanField(null=True)
 
-    mute = BooleanField()
+    mute = BooleanField(null=True)
