@@ -6,7 +6,11 @@ from .models import (
     User,
     UserInform
 )
-from .exceptions import IncorrectJWT
+from .exceptions import (
+    NoIncludeJWT,
+    IncorrectJWT,
+    ExpiredJWT
+)
 
 from conf.hidden import JWT_SECRET_KEY
 
@@ -33,6 +37,19 @@ class HashService(object):
 
 class JWTService(object):
     @staticmethod
+    def run_auth_process(headers: dict) -> int:
+        try:
+            pk = JWTService.decode_access_token_to_id(headers['Authorization'])
+        except KeyError:
+            raise NoIncludeJWT
+        except jwt.exceptions.InvalidSignatureError:
+            raise IncorrectJWT
+        except jwt.exceptions.ExpiredSignatureError:
+            raise ExpiredJWT
+
+        return pk
+
+    @staticmethod
     def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
         return jwt.encode({
             'id': user_id,
@@ -47,3 +64,5 @@ class JWTService(object):
             raise IncorrectJWT
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
 
+
+print(JWTService.create_access_token_with_id(1))
