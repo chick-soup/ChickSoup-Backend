@@ -32,6 +32,13 @@ class UserService(object):
 
         return user.id
 
+    @staticmethod
+    def update_user_profile(pk: int, nickname: str, status_message: str) -> None:
+        user = UserInform.objects.get(user_id=User.objects.get(pk=pk))
+        user.nickname = nickname
+        user.status_message = status_message
+        user.save()
+
 
 class HashService(object):
     @staticmethod
