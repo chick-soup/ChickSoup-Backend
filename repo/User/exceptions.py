@@ -18,5 +18,5 @@ class NoIncludeJWT(APIException):
 
 class IncorrectJWT(APIException):
     status_code = 422
-    default_detail = "We can't decode this JWT."
+    default_detail = "You included JWT which is incorrect."
 
