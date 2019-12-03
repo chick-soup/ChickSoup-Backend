@@ -9,3 +9,4 @@ urlpatterns = [
     path('check', EmailCheckAPI.as_view()),
     path('auth', EmailAuthAPI.as_view())
 ]
+
