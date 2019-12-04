@@ -25,8 +25,8 @@ class UserService(object):
         return True if len(User.objects.filter(pk=pk).values()) else False
 
     @staticmethod
-    def get_password_by_email(email: str) -> str:
-        return User.objects.get(email=email).password
+    def get_user_by_email(email: str) -> User:
+        return User.objects.get(email=email)
 
     @staticmethod
     def create_new_user(email: str, hashed_password: str) -> int:
@@ -48,6 +48,10 @@ class HashService(object):
     @staticmethod
     def hash_string_to_password(password: str) -> str:
         return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    @staticmethod
+    def compare_pw_and_hash(password: str, hashed: str) -> bool:
+        return bcrypt.checkpw(password, hashed)
 
 
 class JWTService(object):
