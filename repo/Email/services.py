@@ -55,8 +55,8 @@ class EmailService(object):
 
 class Random(object):
     @staticmethod
-    def create_random_string() -> str:
+    def create_random_string(digit: int) -> str:
         result = ""
-        for i in range(10):
+        for i in range(digit):
             result += random.choice(string.ascii_letters + string.digits)
         return result
