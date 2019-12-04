@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from Email.services import EmailService, ClientService
-from Email.exceptions import EmailExists
+from Email.exceptions import EmailExists, NotPermissionEmail
 from .exceptions import (
     UnauthenticatedEmail,
     UserNotFound,
@@ -27,7 +27,6 @@ from .services import (
 class LoginAPI(APIView):
     def post(self, request):
         serializer = LoginSerializers(data=request.data)
-
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -77,6 +76,9 @@ class SignUpAPI(APIView):
 
         if UserService.check_email_exists(_email):
             raise EmailExists
+
+        if EmailService.check_email_auth_ip(_email) != ClientService.get_client_ip(request):
+            raise NotPermissionEmail
 
         pk = UserService.create_new_user(_email, HashService.hash_string_to_password(_password))
 

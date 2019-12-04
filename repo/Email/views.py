@@ -11,11 +11,13 @@ from .serializers import (
 from .services import (
     EmailService,
     Random,
+    ClientService
 )
 from .exceptions import (
     EmailExists,
     EmailNotRequestAuth,
-    AuthCodeDoseNotMatch
+    AuthCodeDoseNotMatch,
+    NotPermissionEmail
 )
 
 
@@ -38,7 +40,7 @@ class EmailAuthAPI(APIView):
         if data["auth_code"] != EmailService.check_email_auth_code(email):
             raise AuthCodeDoseNotMatch
 
-        EmailService.email_auth_complete(email)
+        EmailService.email_auth_complete(email, ClientService.get_client_ip(request))
         return Response(data, status=status.HTTP_200_OK)
 
 

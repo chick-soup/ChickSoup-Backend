@@ -14,3 +14,8 @@ class EmailNotRequestAuth(APIException):
 class AuthCodeDoseNotMatch(APIException):
     status_code = 472
     default_detail = "The authentication number does not match."
+
+
+class NotPermissionEmail(APIException):
+    status_code = 473
+    default_detail = "You don't have permission for that email."
