@@ -44,7 +44,7 @@ class SignUpAPI(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        data = serializer.initial_data
+        data = serializer.initial_datal
         _email = data["email"]
         _password = data["password"]
 
