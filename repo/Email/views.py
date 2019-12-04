@@ -54,7 +54,7 @@ class EmailCheckAPI(APIView):
 
         EmailService.delete_email_if_exist(email)
 
-        auth_code = Random.create_random_string()
+        auth_code = Random.create_random_string(10)
         EmailService.send_email(email, code=auth_code)
 
         EmailService.create_email_queryset(email=email, auth_code=auth_code)

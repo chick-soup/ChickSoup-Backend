@@ -11,6 +11,7 @@ from .exceptions import (
     IncorrectJWT,
     ExpiredJWT
 )
+from Email.services import Random
 
 from conf.hidden import JWT_SECRET_KEY
 
@@ -32,7 +33,7 @@ class UserService(object):
     def create_new_user(email: str, hashed_password: str) -> int:
         user = User(email=email, password=hashed_password)
         user.save()
-        UserInform(user_id=user, nickname="DEFAULT", status_message=None).save()
+        UserInform(user_id=user, kakao_id=KakaoIdService.create_new_kakao_id(), nickname="DEFAULT", status_message=None).save()
 
         return user.id
 
@@ -52,6 +53,19 @@ class HashService(object):
     @staticmethod
     def compare_pw_and_hash(password: str, hashed: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+
+
+class KakaoIdService(object):
+    @staticmethod
+    def create_new_kakao_id() -> str:
+        kakao_id_list = []
+        for user in list(UserInform.objects.all().values()):
+            kakao_id_list.append(user["kakao_id"])
+
+        while True:
+            random = Random.create_random_string(16)
+            if random not in kakao_id_list:
+                return random
 
 
 class JWTService(object):
