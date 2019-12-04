@@ -51,7 +51,7 @@ class HashService(object):
 
     @staticmethod
     def compare_pw_and_hash(password: str, hashed: str) -> bool:
-        return bcrypt.checkpw(password, hashed)
+        return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 
 class JWTService(object):
@@ -82,6 +82,3 @@ class JWTService(object):
         if not jwt.get_unverified_header(access_token)['token'] == 'access':
             raise IncorrectJWT
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
-
-
-print(JWTService.create_access_token_with_id(1))
