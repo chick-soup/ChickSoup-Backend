@@ -8,17 +8,40 @@ from Email.services import EmailService
 from Email.exceptions import EmailExists
 from .exceptions import (
     UnauthenticatedEmail,
-    UserNotFound
+    UserNotFound,
+    IdAndPwNotMatch,
+    IdNotExist
 )
 from .serializers import (
     SignUpSerializers,
-    ProfileSerializers
+    ProfileSerializers,
+    LoginSerializers
 )
 from .services import (
     UserService,
     HashService,
     JWTService
 )
+
+
+class LoginAPI(APIView):
+    def post(self, request):
+        serializer = LoginSerializers(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        data = serializer.initial_data
+        _email = data["email"]
+
+        if not UserService.check_email_exists(_email):
+            raise IdNotExist
+
+        user = UserService.get_user_by_email(_email)
+        if HashService.compare_pw_and_hash(data["password"], user.password):
+            return Response({"access_token": JWTService.create_access_token_with_id(user.id)})
+
+        raise IdAndPwNotMatch
 
 
 class SignUpProfileAPI(APIView):

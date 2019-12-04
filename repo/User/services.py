@@ -25,6 +25,10 @@ class UserService(object):
         return True if len(User.objects.filter(pk=pk).values()) else False
 
     @staticmethod
+    def get_user_by_email(email: str) -> User:
+        return User.objects.get(email=email)
+
+    @staticmethod
     def create_new_user(email: str, hashed_password: str) -> int:
         user = User(email=email, password=hashed_password)
         user.save()
@@ -44,6 +48,10 @@ class HashService(object):
     @staticmethod
     def hash_string_to_password(password: str) -> str:
         return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    @staticmethod
+    def compare_pw_and_hash(password: str, hashed: str) -> bool:
+        return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 
 class JWTService(object):
@@ -74,6 +82,3 @@ class JWTService(object):
         if not jwt.get_unverified_header(access_token)['token'] == 'access':
             raise IncorrectJWT
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
-
-
-print(JWTService.create_access_token_with_id(1))
