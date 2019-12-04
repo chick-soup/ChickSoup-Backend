@@ -1,3 +1,5 @@
+import threading
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -55,7 +57,9 @@ class EmailCheckAPI(APIView):
         EmailService.delete_email_if_exist(email)
 
         auth_code = Random.create_random_string(10)
-        EmailService.send_email(email, code=auth_code)
+        EmailService.create_email_queryset(email, auth_code)
 
-        EmailService.create_email_queryset(email=email, auth_code=auth_code)
+        t = threading.Thread(target=EmailService.send_email, args=(email, auth_code, ))
+        t.start()
+
         return Response({"email": email}, status=status.HTTP_200_OK)
