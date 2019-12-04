@@ -25,6 +25,10 @@ class UserService(object):
         return True if len(User.objects.filter(pk=pk).values()) else False
 
     @staticmethod
+    def get_password_by_email(email: str) -> str:
+        return User.objects.get(email=email).password
+
+    @staticmethod
     def create_new_user(email: str, hashed_password: str) -> int:
         user = User(email=email, password=hashed_password)
         user.save()
