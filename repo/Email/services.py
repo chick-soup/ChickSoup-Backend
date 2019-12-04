@@ -36,21 +36,20 @@ class EmailService(object):
         email_instance.save()
 
     @staticmethod
-    def send_email(*email_list: List[str, ], code: str) -> None:
-        for email in email_list:
-            send_mail(
-                'ChickSoup 이메일 인증 코드입니다.',
-                f"""
-                If you want to go through the certification process for our service, you need to read this article.
+    def send_email(email: str, code: str) -> None:
+        send_mail(
+            'ChickSoup 이메일 인증 코드입니다.',
+            f"""
+            If you want to go through the certification process for our service, you need to read this article.
 
-                Hello, customer with e-mail {email}?
-                Thank you very much for your email certification to use our service.
-                The authentication number for your email we provided is {code}.
-                """,
-                'richimous0719@gmail.com',
-                [email],
-                fail_silently=False,
-            )
+            Hello, customer with e-mail {email}?
+            Thank you very much for your email certification to use our service.
+            The authentication number for your email we provided is {code}.
+            """,
+            'richimous0719@gmail.com',
+            [email],
+            fail_silently=False,
+        )
 
 
 class Random(object):
