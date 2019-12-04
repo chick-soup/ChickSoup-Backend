@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'User.apps.UserConfig',
     'Email.apps.EmailConfig',
-    'Friend.apps.FriendConfig'
 ]
 
 MIDDLEWARE = [
