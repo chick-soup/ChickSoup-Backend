@@ -5,7 +5,7 @@ from .models import (
 
 
 class EmailAuthAdmin(admin.ModelAdmin):
-    list_display = ['email', 'auth_code', 'auth_status']
+    list_display = ['email', 'auth_code', 'auth_status', 'auth_ip']
 
 
 admin.site.register(EmailAuth, EmailAuthAdmin)

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from Email.services import EmailService
+from Email.services import EmailService, ClientService
 from Email.exceptions import EmailExists
 from .exceptions import (
     UnauthenticatedEmail,
@@ -28,6 +28,7 @@ class LoginAPI(APIView):
     def post(self, request):
         serializer = LoginSerializers(data=request.data)
 
+
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -39,7 +40,7 @@ class LoginAPI(APIView):
 
         user = UserService.get_user_by_email(_email)
         if HashService.compare_pw_and_hash(data["password"], user.password):
-            return Response({"access_token": JWTService.create_access_token_with_id(user.id)})
+            return Response({"access_token": JWTService.create_access_token_with_id(user.id), "client_ip": ClientService.get_client_ip(request)})
 
         raise IdAndPwNotMatch
 
