@@ -4,8 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from Email.services import EmailService
-from Email.exceptions import EmailExists
+from Email.services import EmailService, ClientService
+from Email.exceptions import EmailExists, NotPermissionEmail
 from .exceptions import (
     UnauthenticatedEmail,
     UserNotFound,
@@ -39,7 +39,7 @@ class LoginAPI(APIView):
 
         user = UserService.get_user_by_email(_email)
         if HashService.compare_pw_and_hash(data["password"], user.password):
-            return Response({"access_token": JWTService.create_access_token_with_id(user.id)})
+            return Response({"access_token": JWTService.create_access_token_with_id(user.id), "client_ip": ClientService.get_client_ip(request)})
 
         raise IdAndPwNotMatch
 
@@ -76,6 +76,9 @@ class SignUpAPI(APIView):
 
         if UserService.check_email_exists(_email):
             raise EmailExists
+
+        if EmailService.check_email_auth_ip(_email) != ClientService.get_client_ip(request):
+            raise NotPermissionEmail
 
         pk = UserService.create_new_user(_email, HashService.hash_string_to_password(_password))
 
