@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class UserInformAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'nickname', 'status_message']
+    list_display = ['user_id', 'kakao_id', 'nickname', 'status_message']
 
 
 admin.site.register(User, UserAdmin)
