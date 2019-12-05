@@ -16,6 +16,6 @@ class UserInform(models.Model):
     class Meta:
         verbose_name_plural = "UserInform"
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    kakao_id = models.CharField(max_length=10, default='DEFAULT_KAKAO_ID')
+    kakao_id = models.CharField(max_length=16, default='DEFAULT_KAKAO_ID')
     nickname = models.CharField(max_length=16)
     status_message = models.CharField(max_length=100, null=True)
