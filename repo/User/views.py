@@ -56,7 +56,7 @@ class SignUpProfileAPI(APIView):
         if not UserService.check_pk_exists(pk):
             raise UserNotFound
 
-        UserService.update_user_profile(pk, data["nickname"], data["status_message"])
+        UserService.update_user_profile(pk, data["nickname"])
         return Response(pk, status=status.HTTP_200_OK)
 
 
