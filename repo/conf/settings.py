@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'User.apps.UserConfig',
     'Email.apps.EmailConfig',
-    '',
 ]
 
 MIDDLEWARE = [
