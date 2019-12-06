@@ -25,7 +25,10 @@ SECRET_KEY = '^zem=+pt04d$(+%*%p4_p-)@iv==9pcm*^&byf79-k5ph8w2^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '.ap-northeast-2.compute.amazonaws.com',
+]
 
 
 # Application definition
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'User.apps.UserConfig',
     'Email.apps.EmailConfig',
+    '',
 ]
 
 MIDDLEWARE = [
