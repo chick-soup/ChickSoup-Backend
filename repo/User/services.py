@@ -112,13 +112,16 @@ class S3Service(object):
         return s3_resource
 
     @staticmethod
+    def upload_profile(user_id, body, resource):
+        resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public-read')
+        body.close()
+
+    @staticmethod
     def upload_default_profile(user_id, resource):
         try:
             body = open('/Users/parkjinhong/Project/ChickSoup-Backend/data/image/default_profile.png', 'rb')
-            resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public-read')
-            body.close()
         except FileNotFoundError:
             body = open('/srv/ChickSoup-Backend/data/image/default_profile.png', 'rb')
-            resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public_read')
-            body.close()
+
+        S3Service.upload_profile(user_id, body, resource)
 

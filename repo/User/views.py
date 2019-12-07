@@ -20,7 +20,8 @@ from .serializers import (
 from .services import (
     UserService,
     HashService,
-    JWTService
+    JWTService,
+    S3Service
 )
 
 
@@ -52,12 +53,16 @@ class SignUpProfileAPI(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        data = serializer.initial_data
         if not UserService.check_pk_exists(pk):
             raise UserNotFound
 
+        data = serializer.initial_data
+        profile = request.FILES.get('profile')
+
+        S3Service.upload_profile(pk, profile, S3Service.make_s3_resource())
+
         UserService.update_user_profile(pk, data["nickname"])
-        return Response(pk, status=status.HTTP_200_OK)
+        return Response({"id": pk}, status=status.HTTP_200_OK)
 
 
 class SignUpAPI(APIView):
