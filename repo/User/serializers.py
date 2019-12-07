@@ -8,6 +8,7 @@ class SignUpSerializers(serializers.Serializer):
 
 class ProfileSerializers(serializers.Serializer):
     nickname = serializers.CharField(max_length=12)
+    profile = serializers.ImageField()
 
 
 class LoginSerializers(serializers.Serializer):
