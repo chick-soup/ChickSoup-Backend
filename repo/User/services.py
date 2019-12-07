@@ -30,6 +30,10 @@ class UserService(object):
         return User.objects.get(email=email)
 
     @staticmethod
+    def get_user_by_pk(pk: int) -> User:
+        return User.objects.get(pk=pk)
+
+    @staticmethod
     def create_new_user(email: str, hashed_password: str) -> int:
         user = User(email=email, password=hashed_password)
         user.save()
