@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from .hidden import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,10 +26,7 @@ SECRET_KEY = '^zem=+pt04d$(+%*%p4_p-)@iv==9pcm*^&byf79-k5ph8w2^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '.ap-northeast-2.compute.amazonaws.com',
-]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'storages',
     'rest_framework',
     'User.apps.UserConfig',
     'Email.apps.EmailConfig',
@@ -86,14 +85,15 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': "chicksoup.cdb3imxrakfq.ap-northeast-2.rds.amazonaws.com",
+        'HOST': MY_DATABASES_HOST,
         'PORT': '5432',
-        'NAME': 'ChickSoup',
-        'USER': 'ChickSoup',
-        'PASSWORD': "ChickSoup",
+        'NAME': MY_DATABASES_NAME,
+        'USER': MY_DATABASES_USER,
+        'PASSWORD': MY_DATABASES_PASSWROD,
     }
 }
 
@@ -136,11 +136,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# SMTP 서버 접속을 위한 이메일 설정
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = 'richimous0719@gmail.com'
-from .hidden import EMAIL_HOST_PASSWORD as MY_EMAIL_HOST_PASSWORD
 EMAIL_HOST_PASSWORD = MY_EMAIL_HOST_PASSWORD
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# AWS S3 서버 접속을 위한 설정
+AWS_ACCESS_KEY_ID = MY_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = MY_AWS_SECRET_ACCESS_KEY
+AWS_REGION = MY_AWS_REGION
+AWS_STORAGE_BUCKET_NAME = MY_AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = MY_AWS_S3_CUSTOM_DOMAIN
+AWS_S3_OBJECT_PARAMETERS = MY_AWS_S3_OBJECT_PARAMETERS
+
+DEFAULT_FILE_STORAGE = 'conf.storage.MediaStorage'
+MEDIAFILES_LOCATION = 'media'
