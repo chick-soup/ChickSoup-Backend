@@ -35,6 +35,7 @@ class UserService(object):
         user.save()
         UserInform(user_id=user, kakao_id=KakaoIdService.create_new_kakao_id(), nickname="DEFAULT", status_message=None).save()
 
+        S3Service.upload_default_profile(user.id, S3Service.make_s3_resource())
         return user.id
 
     @staticmethod
@@ -112,5 +113,12 @@ class S3Service(object):
 
     @staticmethod
     def upload_default_profile(user_id, resource):
-        with open('ChickSoup-Backend/data/image/defualt_profile.png') as body:
+        try:
+            body = open('/Users/parkjinhong/Project/ChickSoup-Backend/data/image/default_profile.png', 'rb')
+            resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public-read')
+            body.close()
+        except FileNotFoundError:
+            body = open('/srv/ChickSoup-Backend/data/image/default_profile.png', 'rb')
             resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public_read')
+            body.close()
+
