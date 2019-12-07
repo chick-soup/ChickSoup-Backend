@@ -109,3 +109,8 @@ class S3Service(object):
         )
 
         return s3_resource
+
+    @staticmethod
+    def upload_default_profile(user_id, resource):
+        with open('ChickSoup-Backend/data/image/defualt_profile.png') as body:
+            resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/{user_id}.png', ACL='public_read')
