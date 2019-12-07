@@ -1,5 +1,6 @@
 import bcrypt
 import jwt
+import boto3
 from datetime import datetime, timedelta
 
 from .models import (
@@ -12,8 +13,7 @@ from .exceptions import (
     ExpiredJWT
 )
 from Email.services import Random
-
-from conf.hidden import JWT_SECRET_KEY
+from conf.hidden import JWT_SECRET_KEY, MY_AWS_ACCESS_KEY_ID, MY_AWS_SECRET_ACCESS_KEY, MY_AWS_REGION
 
 
 class UserService(object):
@@ -96,3 +96,16 @@ class JWTService(object):
         if not jwt.get_unverified_header(access_token)['token'] == 'access':
             raise IncorrectJWT
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
+
+
+class S3Service(object):
+    @staticmethod
+    def make_s3_resource():
+        s3_resource = boto3.resource(
+            's3',
+            aws_access_key_id=MY_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=MY_AWS_SECRET_ACCESS_KEY,
+            region_name=MY_AWS_REGION,
+        )
+
+        return s3_resource
