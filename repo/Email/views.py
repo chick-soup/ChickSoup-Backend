@@ -60,8 +60,6 @@ class EmailCheckAPI(APIView):
 
         auth_code = Random.create_random_string(10)
         EmailService.create_email_queryset(email, auth_code)
-
-        t = threading.Thread(target=EmailService.send_email, args=(email, auth_code, ))
-        t.start()
+        threading.Thread(target=EmailService.send_email, args=(email, auth_code, )).start()
 
         return Response({"email": email}, status=status.HTTP_200_OK)
