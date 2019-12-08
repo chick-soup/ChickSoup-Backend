@@ -53,9 +53,6 @@ class SignUpProfileAPI(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if not UserService.check_pk_exists(pk):
-            raise UserNotFound
-
         data = serializer.initial_data
 
         profile = request.FILES.get('profile')
