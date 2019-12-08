@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'User.apps.UserConfig',
     'Email.apps.EmailConfig',
     'Profile.apps.ProfileConfig',
+    'Friend.apps.FriendConfig',
 ]
 
 MIDDLEWARE = [
