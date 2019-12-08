@@ -1,7 +1,13 @@
 from django.urls import path
 
-from .views import MyProfileAPI
+from .views import (
+    MyProfileAPI,
+    PkProfileAPI
+)
+from Kakao.views import MyKakaoIdAPI
 
 urlpatterns = [
-    path('my', MyProfileAPI.as_view()),
+    path('my/profile', MyProfileAPI.as_view()),
+    path('my/kakao-id', MyKakaoIdAPI.as_view()),
+    path("<int:user_id>/profile", PkProfileAPI.as_view()),
 ]

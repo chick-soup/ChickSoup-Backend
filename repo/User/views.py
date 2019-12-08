@@ -57,9 +57,10 @@ class SignUpProfileAPI(APIView):
             raise UserNotFound
 
         data = serializer.initial_data
-        profile = request.FILES.get('profile')
 
-        S3Service.upload_profile(pk, profile, S3Service.make_s3_resource())
+        profile = request.FILES.get('profile')
+        if profile is not None:
+            S3Service.upload_profile(pk, profile, S3Service.make_s3_resource())
 
         UserService.update_user_profile(pk, data["nickname"])
         return Response({"id": pk}, status=status.HTTP_200_OK)
