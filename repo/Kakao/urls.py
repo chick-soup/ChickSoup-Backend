@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import KakaoProfileAPI
+from .views import KakaIdAPI
+
 
 urlpatterns = [
-    path("<str:kakao_id>", KakaoProfileAPI.as_view()),
+    path("<str:kakao_id>", KakaIdAPI.as_view()),
 ]
