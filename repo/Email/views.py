@@ -17,8 +17,10 @@ from .exceptions import (
     EmailExists,
     EmailNotRequestAuth,
     AuthCodeDoseNotMatch,
-    NotPermissionEmail
+    NotPermissionEmail,
+    EmailAuthComplete
 )
+from User.services import UserService
 
 
 # 이메일과 인증 코드를 받아서 인증을 완료시키는 API
@@ -53,8 +55,12 @@ class EmailCheckAPI(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         email = serializer.initial_data["email"]
-        if EmailService.check_email_exists(email) and EmailService.check_email_auth_status(email):
+
+        if UserService.check_email_exists(email):
             raise EmailExists
+
+        if EmailService.check_email_exists(email) and EmailService.check_email_auth_status(email):
+            raise EmailAuthComplete
 
         EmailService.delete_email_if_exist(email)
 

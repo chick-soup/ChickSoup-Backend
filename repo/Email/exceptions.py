@@ -1,9 +1,9 @@
 from rest_framework.exceptions import APIException
 
 
-class EmailExists(APIException):
+class EmailAuthComplete(APIException):
     status_code = 470
-    default_detail = "This email is already used."
+    default_detail = "This email is already authenticated."
 
 
 class EmailNotRequestAuth(APIException):
@@ -19,3 +19,8 @@ class AuthCodeDoseNotMatch(APIException):
 class NotPermissionEmail(APIException):
     status_code = 473
     default_detail = "You don't have permission for that email."
+
+
+class EmailExists(APIException):
+    status_code = 474
+    default_detail = "This email is already used for sign up."
