@@ -5,6 +5,6 @@ from .views import (
     PkProfileAPI
 )
 urlpatterns = [
-    path('my', MyProfileAPI.as_view()),
-    path("<int:user_id>", PkProfileAPI.as_view()),
+    path('my/profile', MyProfileAPI.as_view()),
+    path("<int:user_id>/profile", PkProfileAPI.as_view()),
 ]
