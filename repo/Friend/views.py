@@ -9,7 +9,8 @@ from .exceptions import (
     FriendNotFound,
     AlreadyRequest,
     AlreadyFriend,
-    Myself
+    Myself,
+    NotFriend
 )
 from User.services import (
     JWTService,
@@ -20,7 +21,7 @@ from Kakao.services import (
 )
 
 
-class KakaoIdAddFriendAPI(object):
+class KakaoIdFriendAPI(object):
     @staticmethod
     def post(request, kakao_id):
         host_id = JWTService.run_auth_process(request.headers)
@@ -43,8 +44,25 @@ class KakaoIdAddFriendAPI(object):
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_200_OK)
 
+    @staticmethod
+    def delete(request, kakao_id):
+        host_id = JWTService.run_auth_process(request.headers)
 
-class UserIdAddFriendAPI(object):
+        if not KakaoIdService.check_kakao_id_exist(kakao_id):
+            raise FriendNotFound
+
+        guest_id = KakaoIdService.get_pk_with_kakao_id(kakao_id)
+
+        if host_id == guest_id:
+            raise Myself
+        if not FriendService.check_both_friend(host_id, guest_id):
+            raise NotFriend
+
+        FriendService.delete_friend(host_id, guest_id)
+        return Response(status=status.HTTP_200_OK)
+
+
+class UserIdFriendAPI(object):
     @staticmethod
     def post(request, guest_id):
         host_id = JWTService.run_auth_process(request.headers)
@@ -63,4 +81,19 @@ class UserIdAddFriendAPI(object):
 
         if FriendService.check_if_friend_or_not(host_id=guest_id, guest_id=host_id):
             return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
+
+    @staticmethod
+    def delete(request, guest_id):
+        host_id = JWTService.run_auth_process(request.headers)
+
+        if not UserService.check_pk_exists(guest_id):
+            raise FriendNotFound
+
+        if host_id == guest_id:
+            raise Myself
+        if not FriendService.check_both_friend(host_id, guest_id):
+            raise NotFriend
+
+        FriendService.delete_friend(host_id, guest_id)
         return Response(status=status.HTTP_200_OK)
