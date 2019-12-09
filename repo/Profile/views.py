@@ -13,6 +13,7 @@ from User.services import (
     UserService,
     S3Service
 )
+from Friend.views import UserIdAddFriendAPI
 
 
 class MyProfileAPI(APIView):
@@ -44,7 +45,7 @@ class MyProfileAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class PkProfileAPI(APIView):
+class UserIdAPI(APIView):
     def get(self, request, user_id):
         pk = JWTService.run_auth_process(request.headers)
 
@@ -58,4 +59,7 @@ class PkProfileAPI(APIView):
             "status_message": "" if profile.status_message is None else profile.status_message,
             "myself": True if pk is user_id else False
         }, status=status.HTTP_200_OK)
+
+    def post(self, request, user_id):
+        return UserIdAddFriendAPI.post(request, user_id)
 
