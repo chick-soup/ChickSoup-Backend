@@ -19,3 +19,8 @@ class AlreadyFriend(APIException):
 class Myself(APIException):
     status_code = 473
     default_detail = "You cannot send a request to add a friend to yourself."
+
+
+class NotFriend(APIException):
+    status_code = 471
+    default_detail = "You are not friends with that user."
