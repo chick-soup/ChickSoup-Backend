@@ -15,3 +15,8 @@ class FriendService(object):
         if FriendService.check_if_friend_or_not(id1, id2) and FriendService.check_if_friend_or_not(id2, id1):
             return True
         return False
+
+    @staticmethod
+    def delete_friend(host_id: int, guest_id: int) -> None:
+        Friend.objects.get(host_id=host_id, guest_id=guest_id).delete()
+        Friend.objects.get(host_id=guest_id, guest_id=host_id).delete()
