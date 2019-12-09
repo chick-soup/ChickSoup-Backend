@@ -13,15 +13,12 @@ from User.services import (
     UserService,
     S3Service
 )
-from User.exceptions import UserNotFound
+from Friend.views import UserIdFriendAPI
 
 
 class MyProfileAPI(APIView):
     def get(self, request):
         pk = JWTService.run_auth_process(request.headers)
-
-        if not UserService.check_pk_exists(pk):
-            raise UserNotFound
 
         profile = ProfileService.get_profile_with_pk(pk)
 
@@ -39,9 +36,6 @@ class MyProfileAPI(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if not UserService.check_pk_exists(pk):
-            raise UserNotFound
-
         profile = request.FILES.get('profile')
         if profile is not None:
             S3Service.upload_profile(pk, profile, S3Service.make_s3_resource())
@@ -51,12 +45,9 @@ class MyProfileAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class PkProfileAPI(APIView):
+class UserIdAPI(APIView):
     def get(self, request, user_id):
         pk = JWTService.run_auth_process(request.headers)
-
-        if not (UserService.check_pk_exists(pk) and UserService.check_pk_exists(user_id)):
-            raise UserNotFound
 
         profile = ProfileService.get_profile_with_pk(user_id)
 
@@ -69,3 +60,8 @@ class PkProfileAPI(APIView):
             "myself": True if pk is user_id else False
         }, status=status.HTTP_200_OK)
 
+    def post(self, request, user_id):
+        return UserIdFriendAPI.post(request, user_id)
+
+    def delete(self, request, user_id):
+        return UserIdFriendAPI.delete(request, user_id)
