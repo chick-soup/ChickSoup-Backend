@@ -9,3 +9,9 @@ class FriendService(object):
     @staticmethod
     def create_new_friend(host_id: int, guest_id: int) -> None:
         Friend(host_id=host_id, guest_id=guest_id).save()
+
+    @staticmethod
+    def check_both_friend(id1: int, id2: int) -> bool:
+        if FriendService.check_if_friend_or_not(id1, id2) and FriendService.check_if_friend_or_not(id2, id1):
+            return True
+        return False
