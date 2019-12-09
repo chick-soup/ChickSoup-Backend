@@ -17,4 +17,4 @@ class KakaoIdService(object):
 
     @staticmethod
     def get_pk_with_kakao_id(kakao_id: str) -> int:
-        return User.objects.get(user_id=UserInform.objects.get(kakao_id=kakao_id)).id
+        return KakaoIdService.get_profile_with_kakao_id(kakao_id).user_id.id
