@@ -6,9 +6,14 @@ class FriendNotFound(APIException):
     default_detail = "The user for this friend_id is not exist"
 
 
-class AlreadyFriend(APIException):
+class AlreadyRequest(APIException):
     status_code = 471
     default_detail = "This is the user who has already sent the friend request."
+
+
+class AlreadyFriend(APIException):
+    status_code = 472
+    default_detail = "This is the user who is already a friend."
 
 
 class Myself(APIException):
