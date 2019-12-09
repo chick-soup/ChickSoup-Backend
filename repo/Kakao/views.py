@@ -12,7 +12,7 @@ from .services import KakaoIdService
 from .exceptions import (
     InvalidKakaoId
 )
-from Friend.views import KakaoIdAddFriendAPI
+from Friend.views import KakaoIdFriendAPI
 
 
 class MyKakaoIdAPI(APIView):
@@ -38,4 +38,7 @@ class KakaIdAPI(APIView):
         }, status=status.HTTP_200_OK)
 
     def post(self, request, kakao_id):
-        return KakaoIdAddFriendAPI.post(request, kakao_id)
+        return KakaoIdFriendAPI.post(request, kakao_id)
+
+    def delete(self, request, kakao_id):
+        return KakaoIdFriendAPI.delete(request, kakao_id)

@@ -13,7 +13,7 @@ from User.services import (
     UserService,
     S3Service
 )
-from Friend.views import UserIdAddFriendAPI
+from Friend.views import UserIdFriendAPI
 
 
 class MyProfileAPI(APIView):
@@ -61,5 +61,5 @@ class UserIdAPI(APIView):
         }, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
-        return UserIdAddFriendAPI.post(request, user_id)
+        return UserIdFriendAPI.post(request, user_id)
 
