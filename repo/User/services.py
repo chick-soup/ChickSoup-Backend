@@ -10,7 +10,8 @@ from .models import (
 from .exceptions import (
     NoIncludeJWT,
     IncorrectJWT,
-    ExpiredJWT
+    ExpiredJWT,
+    UserNotFound
 )
 from Email.services import Random
 from conf.hidden import JWT_SECRET_KEY, MY_AWS_ACCESS_KEY_ID, MY_AWS_SECRET_ACCESS_KEY, MY_AWS_REGION
@@ -84,6 +85,9 @@ class JWTService(object):
             raise IncorrectJWT
         except jwt.exceptions.ExpiredSignatureError:
             raise ExpiredJWT
+
+        if not UserService.check_pk_exists(pk):
+            raise UserNotFound
 
         return pk
 
