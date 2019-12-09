@@ -82,3 +82,18 @@ class UserIdFriendAPI(object):
         if FriendService.check_if_friend_or_not(host_id=guest_id, guest_id=host_id):
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_200_OK)
+
+    @staticmethod
+    def delete(request, guest_id):
+        host_id = JWTService.run_auth_process(request.headers)
+
+        if not UserService.check_pk_exists(guest_id):
+            raise FriendNotFound
+
+        if host_id == guest_id:
+            raise Myself
+        if not FriendService.check_both_friend(host_id, guest_id):
+            raise NotFriend
+
+        FriendService.delete_friend(host_id, guest_id)
+        return Response(status=status.HTTP_200_OK)
