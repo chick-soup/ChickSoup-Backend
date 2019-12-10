@@ -65,3 +65,6 @@ class UserIdAPI(APIView):
 
     def delete(self, request, user_id):
         return UserIdFriendAPI.delete(request, user_id)
+
+    def put(self, request, user_id):
+        return UserIdFriendAPI.put(request, user_id)
