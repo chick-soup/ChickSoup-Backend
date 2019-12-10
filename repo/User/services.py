@@ -78,6 +78,8 @@ class JWTService(object):
     @staticmethod
     def run_auth_process(headers: dict) -> int:
         try:
+            if headers['Authorization'] is '':
+                raise KeyError
             pk = JWTService.decode_access_token_to_id(headers['Authorization'])
         except KeyError:
             raise NoIncludeJWT
