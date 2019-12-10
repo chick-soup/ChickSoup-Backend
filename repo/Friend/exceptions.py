@@ -1,6 +1,11 @@
 from rest_framework.exceptions import APIException
 
 
+class PutBadRequest(APIException):
+    status_code = 400
+    default_detail = "You gave either mute, hidden, or bookmark, or more than one."
+
+
 class FriendNotFound(APIException):
     status_code = 470
     default_detail = "The user for this friend_id is not exist"
