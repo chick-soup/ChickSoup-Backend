@@ -17,6 +17,15 @@ class FriendService(object):
         return False
 
     @staticmethod
+    def check_friend_status(host_id: int, guest_id: int, key: str) -> bool:
+        if key is 'mute':
+            return Friend.objects.get(host_id=host_id, guest_id=guest_id).mute
+        if key is 'hidden':
+            return Friend.objects.get(host_id=host_id, guest_id=guest_id).hidden
+        if key is 'bookmark':
+            return Friend.objects.get(host_id=host_id, guest_id=guest_id).bookmark
+
+    @staticmethod
     def delete_friend(host_id: int, guest_id: int) -> None:
         Friend.objects.get(host_id=host_id, guest_id=guest_id).delete()
         Friend.objects.get(host_id=guest_id, guest_id=host_id).delete()
