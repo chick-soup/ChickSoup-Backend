@@ -3,7 +3,7 @@ from .models import Friend
 
 class FriendService(object):
     @staticmethod
-    def check_if_friend_or_not(host_id: int, guest_id: int) -> bool:
+    def check_request_friend(host_id: int, guest_id: int) -> bool:
         return True if len(Friend.objects.filter(host_id=host_id, guest_id=guest_id).values()) else False
 
     @staticmethod
@@ -12,7 +12,7 @@ class FriendService(object):
 
     @staticmethod
     def check_both_friend(id1: int, id2: int) -> bool:
-        if FriendService.check_if_friend_or_not(id1, id2) and FriendService.check_if_friend_or_not(id2, id1):
+        if FriendService.check_request_friend(id1, id2) and FriendService.check_request_friend(id2, id1):
             return True
         return False
 
