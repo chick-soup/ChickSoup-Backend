@@ -9,7 +9,8 @@ from .serializers import (
     MyProfilePutSerializer
 )
 from .exceptions import (
-    NotFriend
+    NotFriend,
+    UserNotFound
 )
 from User.services import (
     JWTService,
@@ -52,6 +53,9 @@ class MyProfileAPI(APIView):
 class UserIdAPI(APIView):
     def get(self, request, user_id):
         pk = JWTService.run_auth_process(request.headers)
+
+        if not UserService.check_pk_exists(user_id):
+            raise UserNotFound
 
         if not FriendService.check_both_friend(id1=pk, id2=user_id) and pk is not user_id:
             raise NotFriend
