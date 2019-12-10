@@ -8,6 +8,7 @@ from User.services import (
     UserService
 )
 from User.exceptions import UserNotFound
+from Friend.services import FriendService
 from .services import KakaoIdService
 from .exceptions import (
     InvalidKakaoId
@@ -23,15 +24,17 @@ class MyKakaoIdAPI(APIView):
 
 class KakaIdAPI(APIView):
     def get(self, request, kakao_id):
-        pk = JWTService.run_auth_process(request.headers)
+        host_id = JWTService.run_auth_process(request.headers)
 
         if not KakaoIdService.check_kakao_id_exist(kakao_id):
             raise InvalidKakaoId
 
         profile = KakaoIdService.get_profile_with_kakao_id(kakao_id)
+        guest_id = profile.user_id.id
 
         return Response({
-            "id": profile.user_id.id,
+            "id": guest_id,
             "nickname": profile.nickname,
-            "myself": True if pk == profile.user_id.id else False
+            "myself": True if host_id == guest_id else False,
+            "relate": FriendService.check_relationship(id1=host_id, id2=guest_id)
         }, status=status.HTTP_200_OK)

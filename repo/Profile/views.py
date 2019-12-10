@@ -8,12 +8,16 @@ from .services import (
 from .serializers import (
     MyProfilePutSerializer
 )
+from .exceptions import (
+    NotFriend
+)
 from User.services import (
     JWTService,
     UserService,
     S3Service
 )
 from Friend.views import UserIdFriendAPI
+from Friend.services import FriendService
 
 
 class MyProfileAPI(APIView):
@@ -49,10 +53,10 @@ class UserIdAPI(APIView):
     def get(self, request, user_id):
         pk = JWTService.run_auth_process(request.headers)
 
+        if not FriendService.check_both_friend(id1=pk, id2=user_id) and pk is not user_id:
+            raise NotFriend
+
         profile = ProfileService.get_profile_with_pk(user_id)
-
-        # 친구 API 구현 후 해당 user_id가 친구가 아니면 exception 추가 하기
-
         return Response({
             "id": user_id,
             "nickname": profile.nickname,
