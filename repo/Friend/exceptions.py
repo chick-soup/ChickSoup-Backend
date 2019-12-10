@@ -21,6 +21,11 @@ class AlreadyFriend(APIException):
     default_detail = "This is the user who is already a friend."
 
 
+class SameStatus(APIException):
+    status_code = 472
+    default_detail = "You are already in the same state with the that friend."
+
+
 class Myself(APIException):
     status_code = 473
     default_detail = "You cannot send a request to add a friend to yourself."
