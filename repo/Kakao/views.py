@@ -12,7 +12,6 @@ from .services import KakaoIdService
 from .exceptions import (
     InvalidKakaoId
 )
-from Friend.views import KakaoIdFriendAPI
 
 
 class MyKakaoIdAPI(APIView):
@@ -36,9 +35,3 @@ class KakaIdAPI(APIView):
             "nickname": profile.nickname,
             "myself": True if pk == profile.user_id.id else False
         }, status=status.HTTP_200_OK)
-
-    def post(self, request, kakao_id):
-        return KakaoIdFriendAPI.post(request, kakao_id)
-
-    def delete(self, request, kakao_id):
-        return KakaoIdFriendAPI.delete(request, kakao_id)
