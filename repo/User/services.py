@@ -103,6 +103,15 @@ class JWTService(object):
         })
 
     @staticmethod
+    def create_refresh_token_with_id(user_id: int, expired_minute: int = 60*24):
+        return jwt.encode({
+            'id': user_id,
+            'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
+        }, JWT_SECRET_KEY, algorithm='HS256', headers={
+            'token': 'refresh'
+        })
+
+    @staticmethod
     def decode_access_token_to_id(access_token: str) -> int:
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
 
