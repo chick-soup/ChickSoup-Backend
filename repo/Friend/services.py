@@ -78,6 +78,11 @@ class FriendService(object):
         return return_list
 
     @staticmethod
+    def sort_friend_list(friend_list: list) -> list:
+        friend_list.sort(key=lambda x: x[1])
+        return friend_list
+
+    @staticmethod
     def convert_list_to_dict(friend_list: list) -> dict:
         return_dict = {}
         count = 1
@@ -89,6 +94,7 @@ class FriendService(object):
                 'hidden': friend[3],
                 'bookmark': friend[4]
             }
+            count += 1
         return return_dict
 
 
