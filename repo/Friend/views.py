@@ -28,8 +28,18 @@ class FriendListAPI(APIView):
     def get(self, request):
         pk = JWTService.run_auth_process(request.headers)
 
-        friend_list = FriendService.sort_friend_list(FriendService.get_friend_list(pk))
+        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
         return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
+
+
+class MuteListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
+        filter_friend_list = FriendService.filter_if_mute_false(friend_list)
+
+        return Response(FriendService.convert_list_to_dict(filter_friend_list), status=status.HTTP_200_OK)
 
 
 class UserIdFriendAPI(object):
