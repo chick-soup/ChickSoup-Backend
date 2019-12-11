@@ -50,9 +50,17 @@ class MyProfileAPI(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        where = request.data['where']
+        if not (where == 'web' or where == 'mobile'):
+            return Response({'detail': "You have to include 'web' or 'mobile' in 'from_where'"}, status=status.HTTP_400_BAD_REQUEST)
+
         profile = request.FILES.get('profile')
         if profile is not None:
             S3Service.upload_profile(pk, profile, S3Service.make_s3_resource())
+
+        background = request.FILES.get('background')
+        if background is not None:
+            S3Service.upload_background(pk, background, S3Service.make_s3_resource(), where)
 
         data = serializer.initial_data
         ProfileService.change_profile_with_pk(pk, data["nickname"], data["status_message"])

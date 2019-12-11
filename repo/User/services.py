@@ -140,13 +140,10 @@ class S3Service(object):
         body.close()
 
     @staticmethod
-    def upload_background_mobile(user_id, body, resource):
-        resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/background/mobile/{user_id}.png', ACL='public-read')
-        body.close()
-
-    @staticmethod
-    def upload_background_web(user_id, body, resource):
-        resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/background/web/{user_id}.png', ACL='public-read')
+    def upload_background(user_id, body, resource, where):
+        if not (where == 'web' or where == 'mobile'):
+            return
+        resource.Bucket('chicksoup').put_object(Body=body, Key=f'media/image/user/background/{where}/{user_id}.png', ACL='public-read')
         body.close()
 
     @staticmethod
@@ -163,14 +160,14 @@ class S3Service(object):
         except FileNotFoundError:
             body = open('/srv/ChickSoup-Backend/data/image/default_background_mobile.png', 'rb')
 
-        S3Service.upload_background_mobile(user_id, body, resource)
+        S3Service.upload_background(user_id, body, resource, 'web')
 
         try:
             body = open('/Users/parkjinhong/Project/ChickSoup-Backend/data/image/default_background_web.png', 'rb')
         except FileNotFoundError:
             body = open('/srv/ChickSoup-Backend/data/image/default_background_web.png', 'rb')
 
-        S3Service.upload_background_web(user_id, body, resource)
+        S3Service.upload_background(user_id, body, resource, 'mobile')
 
 
 
