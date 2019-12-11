@@ -19,7 +19,7 @@ from .views import RefreshAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', RefreshAPI.as_view()),
+    path('refresh', RefreshAPI.as_view()),
     path('', include('User.urls')),
     path('email/', include('Email.urls')),
     path('users/', include('Profile.urls')),
