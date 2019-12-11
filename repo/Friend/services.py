@@ -77,6 +77,20 @@ class FriendService(object):
             return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
         return return_list
 
+    @staticmethod
+    def convert_list_to_dict(friend_list: list) -> dict:
+        return_dict = {}
+        count = 1
+        for friend in friend_list:
+            return_dict[count] = {
+                'id': friend[0],
+                'nickname': friend[1],
+                'mute': friend[2],
+                'hidden': friend[3],
+                'bookmark': friend[4]
+            }
+        return return_dict
+
 
 class UserPutAPIService(object):
     @staticmethod
