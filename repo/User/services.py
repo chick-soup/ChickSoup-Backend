@@ -76,11 +76,13 @@ class KakaoIdService(object):
 
 class JWTService(object):
     @staticmethod
-    def run_auth_process(headers: dict) -> int:
+    def run_auth_process(headers: dict, token_type: str = 'access'):
         try:
             if headers['Authorization'] is '':
                 raise KeyError
-            pk = JWTService.decode_access_token_to_id(headers['Authorization'])
+            pk, token = JWTService.decode_access_token_to_id(headers['Authorization'])
+            if token is not token_type:
+                raise jwt.exceptions.InvalidSignatureError
         except KeyError:
             raise NoIncludeJWT
         except jwt.exceptions.InvalidSignatureError:
@@ -91,7 +93,7 @@ class JWTService(object):
         if not UserService.check_pk_exists(pk):
             raise UserNotFound
 
-        return pk
+        return pk, token
 
     @staticmethod
     def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
