@@ -76,11 +76,10 @@ class KakaoIdService(object):
 
 class JWTService(object):
     @staticmethod
-    def run_auth_process(headers: dict) -> int:
+    def run_auth_process(headers: dict, token_type: str = 'access'):
         try:
-            if headers['Authorization'] is '':
-                raise KeyError
-            pk = JWTService.decode_access_token_to_id(headers['Authorization'])
+            JWTService.check_header_include(headers, 'Authorization')
+            pk = JWTService.decode_access_token_to_id(headers['Authorization'], token_type)
         except KeyError:
             raise NoIncludeJWT
         except jwt.exceptions.InvalidSignatureError:
@@ -94,6 +93,11 @@ class JWTService(object):
         return pk
 
     @staticmethod
+    def check_header_include(headers: dict, key: str) -> None:
+        if (key not in headers) or (headers['Authorization'] is ''):
+            raise KeyError
+
+    @staticmethod
     def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
         return jwt.encode({
             'id': user_id,
@@ -103,7 +107,18 @@ class JWTService(object):
         })
 
     @staticmethod
-    def decode_access_token_to_id(access_token: str) -> int:
+    def create_refresh_token_with_id(user_id: int, expired_minute: int = 60*24):
+        return jwt.encode({
+            'id': user_id,
+            'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
+        }, JWT_SECRET_KEY, algorithm='HS256', headers={
+            'token': 'refresh'
+        })
+
+    @staticmethod
+    def decode_access_token_to_id(access_token: str, token_type):
+        if not token_type == jwt.get_unverified_header(access_token)['token']:
+            raise jwt.exceptions.InvalidSignatureError
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
 
 

@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import RefreshAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('refresh', RefreshAPI.as_view()),
     path('', include('User.urls')),
     path('email/', include('Email.urls')),
     path('users/', include('Profile.urls')),
