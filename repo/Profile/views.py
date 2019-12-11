@@ -77,8 +77,9 @@ class UserIdAPI(APIView):
             "myself": True if pk is user_id else False
         }, status=status.HTTP_200_OK)
 
-    def post(self, request, guest_id):
+    def post(self, request, user_id):
         host_id = JWTService.run_auth_process(request.headers)
+        guest_id = user_id
 
         if not UserService.check_pk_exists(guest_id):
             raise FriendNotFound
