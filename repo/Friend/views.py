@@ -24,6 +24,14 @@ from Kakao.services import (
 )
 
 
+class FriendListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        friend_list = FriendService.sort_friend_list(FriendService.get_friend_list(pk))
+        return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
+
+
 class UserIdFriendAPI(object):
     @staticmethod
     def post(request, guest_id):
