@@ -78,6 +78,11 @@ class FriendService(object):
         return return_list
 
     @staticmethod
+    def sort_list(friend_list: list) -> list:
+        friend_list.sort(key=lambda x: x[1])
+        return friend_list
+
+    @staticmethod
     def convert_list_to_dict(friend_list: list) -> dict:
         return_dict = {}
         count = 1
@@ -89,7 +94,26 @@ class FriendService(object):
                 'hidden': friend[3],
                 'bookmark': friend[4]
             }
+            count += 1
         return return_dict
+
+    @staticmethod
+    def filter_if_mute_false(friend_list: list) -> list:
+        return_list = []
+        for friend in friend_list:
+            if friend[2] is False:
+                continue
+            return_list.append(friend)
+        return return_list
+
+    @staticmethod
+    def filter_if_hidden_false(friend_list: list) -> list:
+        return_list = []
+        for friend in friend_list:
+            if friend[3] is False:
+                continue
+            return_list.append(friend)
+        return return_list
 
 
 class UserPutAPIService(object):

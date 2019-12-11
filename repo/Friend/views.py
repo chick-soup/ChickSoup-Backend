@@ -24,28 +24,36 @@ from Kakao.services import (
 )
 
 
-class UserIdFriendAPI(object):
-    @staticmethod
-    def post(request, guest_id):
-        host_id = JWTService.run_auth_process(request.headers)
+class FriendListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
 
-        if not UserService.check_pk_exists(guest_id):
-            raise FriendNotFound
-        if host_id is guest_id:
-            raise Myself
-        if FriendService.check_both_friend(id1=host_id, id2=guest_id):
-            raise AlreadyFriend
-        if FriendService.check_request_friend(host_id=host_id, guest_id=guest_id):
-            raise AlreadyRequest
+        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
+        return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
 
-        FriendService.create_new_friend(host_id=host_id, guest_id=guest_id)
 
-        if FriendService.check_request_friend(host_id=guest_id, guest_id=host_id):
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_200_OK)
+class MuteListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
 
-    @staticmethod
-    def delete(request, guest_id):
+        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
+        filter_friend_list = FriendService.filter_if_mute_false(friend_list)
+
+        return Response(FriendService.convert_list_to_dict(filter_friend_list), status=status.HTTP_200_OK)
+
+
+class HiddenListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
+        filter_friend_list = FriendService.filter_if_hidden_false(friend_list)
+
+        return Response(FriendService.convert_list_to_dict(filter_friend_list), status=status.HTTP_200_OK)
+
+
+class UserIdFriendAPI(APIView):
+    def delete(self, request, guest_id):
         host_id = JWTService.run_auth_process(request.headers)
 
         if not UserService.check_pk_exists(guest_id):
@@ -58,8 +66,7 @@ class UserIdFriendAPI(object):
         FriendService.delete_friend(host_id, guest_id)
         return Response(status=status.HTTP_200_OK)
 
-    @staticmethod
-    def put(request, guest_id):
+    def put(self, request, guest_id):
         host_id = JWTService.run_auth_process(request.headers)
 
         if UserPutAPIService.check_put_bad_request(request.data):

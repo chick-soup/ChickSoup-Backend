@@ -17,8 +17,17 @@ from User.services import (
     UserService,
     S3Service
 )
-from Friend.views import UserIdFriendAPI
 from Friend.services import FriendService
+
+from Friend.exceptions import (
+    PutBadRequest,
+    FriendNotFound,
+    AlreadyRequest,
+    AlreadyFriend,
+    Myself,
+    NotFriend,
+    SameStatus
+)
 
 
 class MyProfileAPI(APIView):
@@ -69,10 +78,20 @@ class UserIdAPI(APIView):
         }, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
-        return UserIdFriendAPI.post(request, user_id)
+        host_id = JWTService.run_auth_process(request.headers)
+        guest_id = user_id
 
-    def delete(self, request, user_id):
-        return UserIdFriendAPI.delete(request, user_id)
+        if not UserService.check_pk_exists(guest_id):
+            raise FriendNotFound
+        if host_id is guest_id:
+            raise Myself
+        if FriendService.check_both_friend(id1=host_id, id2=guest_id):
+            raise AlreadyFriend
+        if FriendService.check_request_friend(host_id=host_id, guest_id=guest_id):
+            raise AlreadyRequest
 
-    def put(self, request, user_id):
-        return UserIdFriendAPI.put(request, user_id)
+        FriendService.create_new_friend(host_id=host_id, guest_id=guest_id)
+
+        if FriendService.check_request_friend(host_id=guest_id, guest_id=host_id):
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
