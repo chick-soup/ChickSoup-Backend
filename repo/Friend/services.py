@@ -1,5 +1,7 @@
 from .models import Friend
 
+from Profile.services import ProfileService
+
 
 class FriendService(object):
     @staticmethod
@@ -64,6 +66,36 @@ class FriendService(object):
         if key is 'bookmark':
             friend.bookmark = status
         friend.save()
+
+    @staticmethod
+    def get_friend_list(pk: int) -> list:
+        return_list = []
+        for friend in Friend.objects.filter(host_id=pk):
+            if not FriendService.check_both_friend(id1=pk, id2=friend.guest_id):
+                continue
+            nickname = ProfileService.get_profile_with_pk(friend.guest_id).nickname
+            return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+        return return_list
+
+    @staticmethod
+    def sort_friend_list(friend_list: list) -> list:
+        friend_list.sort(key=lambda x: x[1])
+        return friend_list
+
+    @staticmethod
+    def convert_list_to_dict(friend_list: list) -> dict:
+        return_dict = {}
+        count = 1
+        for friend in friend_list:
+            return_dict[count] = {
+                'id': friend[0],
+                'nickname': friend[1],
+                'mute': friend[2],
+                'hidden': friend[3],
+                'bookmark': friend[4]
+            }
+            count += 1
+        return return_dict
 
 
 class UserPutAPIService(object):
