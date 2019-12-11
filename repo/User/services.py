@@ -78,11 +78,8 @@ class JWTService(object):
     @staticmethod
     def run_auth_process(headers: dict, token_type: str = 'access'):
         try:
-            if headers['Authorization'] is '':
-                raise KeyError
-            pk, token = JWTService.decode_access_token_to_id(headers['Authorization'])
-            if token is not token_type:
-                raise jwt.exceptions.InvalidSignatureError
+            JWTService.check_header_include(headers, 'Authorization')
+            pk = JWTService.decode_access_token_to_id(headers['Authorization'], token_type)
         except KeyError:
             raise NoIncludeJWT
         except jwt.exceptions.InvalidSignatureError:
@@ -93,7 +90,12 @@ class JWTService(object):
         if not UserService.check_pk_exists(pk):
             raise UserNotFound
 
-        return pk, token
+        return pk
+
+    @staticmethod
+    def check_header_include(headers: dict, key: str) -> None:
+        if (key not in headers) or (headers['Authorization'] is ''):
+            raise KeyError
 
     @staticmethod
     def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
@@ -114,7 +116,9 @@ class JWTService(object):
         })
 
     @staticmethod
-    def decode_access_token_to_id(access_token: str) -> int:
+    def decode_access_token_to_id(access_token: str, token_type):
+        if not token_type == jwt.get_unverified_header(access_token)['token']:
+            raise jwt.exceptions.InvalidSignatureError
         return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
 
 
