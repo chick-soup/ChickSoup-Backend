@@ -28,7 +28,7 @@ class FriendListAPI(APIView):
     def get(self, request):
         pk = JWTService.run_auth_process(request.headers)
 
-        friend_list = FriendService.sort_list(FriendService.get_friend_list(pk))
+        friend_list = FriendService.sort_list_with_bookmark(FriendService.get_friend_list(pk))
         return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
 
 
