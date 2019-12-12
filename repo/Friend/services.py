@@ -1,6 +1,7 @@
 from .models import Friend
 
 from Profile.services import ProfileService
+from User.services import UserService
 
 
 class FriendService(object):
@@ -71,10 +72,26 @@ class FriendService(object):
     def get_friend_list(pk: int) -> list:
         return_list = []
         for friend in Friend.objects.filter(host_id=pk):
+            if not UserService.check_pk_exists(friend.guest_id):
+                continue
             if not FriendService.check_both_friend(id1=pk, id2=friend.guest_id):
                 continue
             nickname = ProfileService.get_profile_with_pk(friend.guest_id).nickname
             return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+        return return_list
+
+    @staticmethod
+    def get_request_list(host_id: int) -> list:
+        return_list = []
+
+        for friend in Friend.objects.filter(host_id=host_id):
+            if not UserService.check_pk_exists(friend.guest_id):
+                continue
+            if FriendService.check_both_friend(id1=friend.host_id, id2=friend.guest_id):
+                continue
+            nickname = ProfileService.get_profile_with_pk(friend.guest_id).nickname
+            return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+
         return return_list
 
     @staticmethod
