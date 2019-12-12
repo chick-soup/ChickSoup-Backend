@@ -25,7 +25,6 @@ from Friend.exceptions import (
     AlreadyRequest,
     AlreadyFriend,
     Myself,
-    NotFriend,
     SameStatus
 )
 
