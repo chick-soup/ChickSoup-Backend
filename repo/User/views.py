@@ -41,7 +41,7 @@ class LoginAPI(APIView):
             raise IdAndPwNotMatch
 
         return Response({
-            "access_token": JWTService.create_access_token_with_id(user.id),
+            "access_token": JWTService.create_access_token_with_id(user.id, int(request.data['minute'])) if 'minute' in request.data else JWTService.create_access_token_with_id(user.id),
             "refresh_token": JWTService.create_refresh_token_with_id(user.id)
         }, status=status.HTTP_200_OK)
 
