@@ -56,7 +56,8 @@ class FriendRequestListAPI(APIView):
     def get(self, request):
         pk = JWTService.run_auth_process(request.headers)
 
-        return Response(status=status.HTTP_200_OK)
+        friend_list = FriendService.sort_list(FriendService.get_request_list(host_id=pk))
+        return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
 
 
 class FriendResponseListAPI(APIView):
