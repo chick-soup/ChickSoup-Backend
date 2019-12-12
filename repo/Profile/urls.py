@@ -10,7 +10,8 @@ from Friend.views import (
     MuteListAPI,
     HiddenListAPI,
     UserIdFriendAPI,
-    FriendRequestListAPI
+    FriendRequestListAPI,
+    FriendResponseListAPI
 )
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
     path('my/friends/mute', MuteListAPI.as_view()),
     path('my/friends/hidden', HiddenListAPI.as_view()),
     path('my/friends/request', FriendRequestListAPI.as_view()),
+    path('my/friends/response', FriendResponseListAPI.as_view()),
     path('my/friends/<int:guest_id>', UserIdFriendAPI.as_view()),
     path("<int:user_id>", UserIdAPI.as_view()),
 ]
