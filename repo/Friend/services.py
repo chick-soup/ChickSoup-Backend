@@ -71,13 +71,15 @@ class FriendService(object):
     @staticmethod
     def get_friend_list(pk: int) -> list:
         return_list = []
+
         for friend in Friend.objects.filter(host_id=pk):
             if not UserService.check_pk_exists(friend.guest_id):
                 continue
             if not FriendService.check_both_friend(id1=pk, id2=friend.guest_id):
                 continue
-            nickname = ProfileService.get_profile_with_pk(friend.guest_id).nickname
-            return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+            profile = ProfileService.get_profile_with_pk(friend.guest_id)
+            return_list.append([friend.guest_id, profile.nickname, "" if profile.status_message is None else profile.status_message, friend.mute, friend.hidden, friend.bookmark])
+
         return return_list
 
     @staticmethod
@@ -89,8 +91,8 @@ class FriendService(object):
                 continue
             if FriendService.check_both_friend(id1=friend.host_id, id2=friend.guest_id):
                 continue
-            nickname = ProfileService.get_profile_with_pk(friend.guest_id).nickname
-            return_list.append([friend.guest_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+            profile = ProfileService.get_profile_with_pk(friend.guest_id)
+            return_list.append([friend.guest_id, profile.nickname, "" if profile.status_message is None else profile.status_message, friend.mute, friend.hidden, friend.bookmark])
 
         return return_list
 
@@ -103,8 +105,8 @@ class FriendService(object):
                 continue
             if FriendService.check_both_friend(id1=friend.host_id, id2=friend.guest_id):
                 continue
-            nickname = ProfileService.get_profile_with_pk(friend.host_id).nickname
-            return_list.append([friend.host_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+            profile = ProfileService.get_profile_with_pk(friend.guest_id)
+            return_list.append([friend.guest_id, profile.nickname, "" if profile.status_message is None else profile.status_message, friend.mute, friend.hidden, friend.bookmark])
 
         return return_list
 
@@ -121,9 +123,10 @@ class FriendService(object):
             return_dict[count] = {
                 'id': friend[0],
                 'nickname': friend[1],
-                'mute': friend[2],
-                'hidden': friend[3],
-                'bookmark': friend[4]
+                'status_message': friend[2],
+                'mute': friend[3],
+                'hidden': friend[4],
+                'bookmark': friend[5]
             }
             count += 1
         return return_dict
