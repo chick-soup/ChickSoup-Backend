@@ -52,6 +52,22 @@ class HiddenListAPI(APIView):
         return Response(FriendService.convert_list_to_dict(filter_friend_list), status=status.HTTP_200_OK)
 
 
+class FriendRequestListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        friend_list = FriendService.sort_list(FriendService.get_request_list(host_id=pk))
+        return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
+
+
+class FriendResponseListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        friend_list = FriendService.sort_list(FriendService.get_response_list(pk))
+        return Response(FriendService.convert_list_to_dict(friend_list), status=status.HTTP_200_OK)
+
+
 class UserIdFriendAPI(APIView):
     def delete(self, request, guest_id):
         host_id = JWTService.run_auth_process(request.headers)
