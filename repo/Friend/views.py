@@ -59,6 +59,13 @@ class FriendRequestListAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+class FriendResponseListAPI(APIView):
+    def get(self, request):
+        pk = JWTService.run_auth_process(request.headers)
+
+        return Response(status=status.HTTP_200_OK)
+
+
 class UserIdFriendAPI(APIView):
     def delete(self, request, guest_id):
         host_id = JWTService.run_auth_process(request.headers)
