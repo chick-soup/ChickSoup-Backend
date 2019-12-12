@@ -95,6 +95,20 @@ class FriendService(object):
         return return_list
 
     @staticmethod
+    def get_response_list(host_id: int) -> list:
+        return_list = []
+
+        for friend in Friend.objects.filter(guest_id=host_id):
+            if not UserService.check_pk_exists(friend.host_id):
+                continue
+            if FriendService.check_both_friend(id1=friend.host_id, id2=friend.guest_id):
+                continue
+            nickname = ProfileService.get_profile_with_pk(friend.host_id).nickname
+            return_list.append([friend.host_id, nickname, friend.mute, friend.hidden, friend.bookmark])
+
+        return return_list
+
+    @staticmethod
     def sort_list(friend_list: list) -> list:
         friend_list.sort(key=lambda x: x[1])
         return friend_list
