@@ -116,6 +116,21 @@ class FriendService(object):
         return friend_list
 
     @staticmethod
+    def sort_list_with_bookmark(friend_list: list) -> list:
+        return_list = []
+        friend_list = FriendService.sort_list(friend_list)
+
+        for friend in friend_list:
+            if friend[5] is True:
+                return_list.append(friend)
+
+        for friend in friend_list:
+            if friend[5] is False:
+                return_list.append(friend)
+
+        return return_list
+
+    @staticmethod
     def convert_list_to_dict(friend_list: list) -> dict:
         return_dict = {}
         count = 1
