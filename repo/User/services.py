@@ -160,14 +160,14 @@ class S3Service(object):
         except FileNotFoundError:
             body = open('/srv/ChickSoup-Backend/data/image/default_background_mobile.png', 'rb')
 
-        S3Service.upload_background(user_id, body, resource, 'web')
+        S3Service.upload_background(user_id, body, resource, 'mobile')
 
         try:
             body = open('/Users/parkjinhong/Project/ChickSoup-Backend/data/image/default_background_web.png', 'rb')
         except FileNotFoundError:
             body = open('/srv/ChickSoup-Backend/data/image/default_background_web.png', 'rb')
 
-        S3Service.upload_background(user_id, body, resource, 'mobile')
+        S3Service.upload_background(user_id, body, resource, 'web')
 
 
 
