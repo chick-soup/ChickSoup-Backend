@@ -150,7 +150,7 @@ class FriendService(object):
     def filter_if_mute_false(friend_list: list) -> list:
         return_list = []
         for friend in friend_list:
-            if friend[2] is False:
+            if friend[3] is False:
                 continue
             return_list.append(friend)
         return return_list
@@ -159,7 +159,7 @@ class FriendService(object):
     def filter_if_hidden_false(friend_list: list) -> list:
         return_list = []
         for friend in friend_list:
-            if friend[3] is False:
+            if friend[4] is False:
                 continue
             return_list.append(friend)
         return return_list
