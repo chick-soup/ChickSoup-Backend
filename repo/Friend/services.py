@@ -105,8 +105,8 @@ class FriendService(object):
                 continue
             if FriendService.check_both_friend(id1=friend.host_id, id2=friend.guest_id):
                 continue
-            profile = ProfileService.get_profile_with_pk(friend.guest_id)
-            return_list.append([friend.guest_id, profile.nickname, "" if profile.status_message is None else profile.status_message, friend.mute, friend.hidden, friend.bookmark])
+            profile = ProfileService.get_profile_with_pk(friend.host_id)
+            return_list.append([friend.host_id, profile.nickname, "" if profile.status_message is None else profile.status_message, friend.mute, friend.hidden, friend.bookmark])
 
         return return_list
 
