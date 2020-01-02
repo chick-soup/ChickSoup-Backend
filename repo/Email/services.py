@@ -3,6 +3,8 @@ import random
 from typing import List
 
 from django.core.mail import send_mail
+from django.template import loader
+from django.utils.html import strip_tags
 
 from .models import EmailAuth
 
@@ -42,18 +44,20 @@ class EmailService(object):
 
     @staticmethod
     def send_email(email: str, code: str) -> None:
+        html_message = loader.render_to_string(
+            'index.html',
+            {
+                'email': email,
+                'code': code,
+            }
+        )
+
         send_mail(
             'ChickSoup 이메일 인증 코드입니다.',
-            f"""
-            If you want to go through the certification process for our service, you need to read this article.
-
-            Hello, customer with e-mail {email}?
-            Thank you very much for your email certification to use our service.
-            The authentication number for your email we provided is {code}.
-            """,
+            strip_tags(html_message),
             'richimous0719@gmail.com',
             [email],
-            fail_silently=False,
+            html_message=html_message
         )
 
 
